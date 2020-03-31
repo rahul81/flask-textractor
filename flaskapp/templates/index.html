@@ -1,0 +1,152 @@
+
+<html>
+    <head>
+        <!-- <script type='text/javascript' src='scripts.js'></script> -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
+
+
+    </head>
+    <!-- <script type='text/javascript' src='scripts.js'></script> -->
+<canvas id="canvas" width="700"></canvas>
+<button type="submit" id='SubmitJ' onclick="">Submit</button>
+
+<script>
+var canvas = document.getElementById('canvas');
+var ctx = canvas.getContext('2d');
+var rect = {};
+var drag = false;
+var img = null;
+var cord =[];
+var startx =[];
+var starty =[];
+var w =[];
+var h =[];
+var keys =[];
+
+function init() {
+    img = new Image();
+    img.onload = function () {
+
+    // set size proportional to image
+    canvas.height = canvas.width * (img.height / img.width);
+
+    // step 1 - resize to 50%
+    var oc = document.createElement('canvas'),
+        octx = oc.getContext('2d');
+
+    oc.width = img.width * 1;
+    oc.height = img.height * 1;
+    octx.drawImage(img, 0, 0, oc.width, oc.height);
+
+    // step 2
+    octx.drawImage(oc, 0, 0, oc.width * 1, oc.height * 1);
+
+    // step 3, resize to final size
+    ctx.drawImage(oc, 0, 0, oc.width * 1, oc.height * 1,
+    0, 0, canvas.width, canvas.height);
+};
+    img.src = '/api/a';
+    canvas.addEventListener('mousedown', mouseDown, false);
+    canvas.addEventListener('mouseup', mouseUp, false);
+    canvas.addEventListener('mousemove', mouseMove, false);
+}
+
+function mouseDown(e) {
+    rect.startX = e.pageX - this.offsetLeft;
+    rect.startY = e.pageY - this.offsetTop;
+    drag = true;
+}
+
+function mouseUp() { 
+    drag = false;
+    
+    myFunction()
+     }
+
+function mouseMove(e) {
+    if (drag) {
+        
+        // set size proportional to image
+        canvas.height = canvas.width * (img.height / img.width);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // step 1 - resize to 50%
+        var oc = document.createElement('canvas'),
+        octx = oc.getContext('2d');
+
+        oc.width = img.width * 1;
+        oc.height = img.height * 1;
+        octx.drawImage(img, 0, 0, oc.width, oc.height);
+
+    // step 2
+        octx.drawImage(oc, 0, 0, oc.width * 1, oc.height * 1);
+
+    // step 3, resize to final size
+        ctx.drawImage(oc, 0, 0, oc.width * 1, oc.height * 1, 0, 0, canvas.width, canvas.height);
+
+        rect.w = (e.pageX - this.offsetLeft) - rect.startX;
+        rect.h = (e.pageY - this.offsetTop) - rect.startY;
+        ctx.strokeStyle = 'red';
+        ctx.strokeRect(rect.startX, rect.startY, rect.w, rect.h);
+        
+    
+    }
+
+    
+
+}
+
+
+var cars = [
+	{ "make":"Porsche", "model":"911S" },
+	{ "make":"Mercedes-Benz", "model":"220SE" },
+	{ "make":"Jaguar","model": "Mark VII" }
+];
+
+
+function myFunction() {
+   var Key = prompt("Tag:", "");
+
+   cord = {};
+   console.log(Key);
+//    console.log(rect);
+   startx.push(rect.startX);
+   starty.push(rect.startY);
+   w.push(rect.w);
+   h.push(rect.h);
+   keys.push(Key);
+
+   cord = {keys,startx,starty,w,h};
+   console.log(cord);
+
+}
+
+
+
+// function parsej() {
+// 	// ajax the JSON to the server
+// 	$.post( "/postmethod", {
+//     jdata: cars
+// });
+// 	// stop link reloading the page
+//  event.preventDefault();
+// }
+
+$('#SubmitJ').click(function() {
+        console.log(cord);
+        $.ajax({
+          type: "POST",
+          contentType: "application/json;charset=utf-8",
+          url: "/postmethod",
+          traditional: "true",
+          data: JSON.stringify({cord}),
+          dataType: "json"
+          });
+    });
+
+
+init();
+
+</script>
+
+</html>
