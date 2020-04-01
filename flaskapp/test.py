@@ -113,62 +113,43 @@ def get_df():
 
 
 #detect function to load the image here in server in img variable
-
 def detect(data):
-    
-    #reads the img 
     img = cv2.imread('./Primavera.jpg',cv2.IMREAD_GRAYSCALE)
     print(img.shape)
-
-    #as default width for canvas in html is 700
-    width =700
     
-    #calculate height for new rescaled image as per width of canvas and maintaining image aspect ratio
-    height = width * (img.shape[0]/img.shape[1])
-    
-    #resize img with new dimensions
-    img = cv2.resize(img,(height,width))
+    width = 0.70 * img.shape[1]
+    height = 0.70 * img.shape[0]
 
+    img = cv2.resize(img,(int(width),int(height)))
     print(img.shape)
 
     import pytesseract
 
-    #creates a empty dictionary to store keys and extracted text values from pytesseraact
     texts= {}
     df = data
-    
-    #looping over each row in dataframe
-    #each row contains Key and cordinates of the region
     for i in range(df.shape[0]):
-        
-        #pull values from dataframe by [column_name] and [index] to respective variable 
         label,y1,y2,x1,x2 = df['keys'][i],df['starty'][i],int(df['starty'][i]+df['h'][i]),df['startx'][i],int(df['startx'][i]+df['w'][i])
-        
-        #crop the image with given the above cordinates
         roi = img[y1:y2,x1:x2]
-        
-        #print cordinates
         print(y1,y2,x1,x2)
-        
-        #Write the crop image to disk and check if it is the correct region 
         cv2.imwrite('new.jpg',roi)
-        
-        
-        #below is tesseract code which takes croped regoin of image as input and outputs texts in the image
-        #uncomment when achieved extracting correct region
-        ## text = pytesseract.image_to_string(roi)
-        ## texts[label] = text
+        text = pytesseract.image_to_string(roi)
+        texts[label] = text
 
     
 
-    #prints the texts dictionary containing Keys and extreacted texts
-    # print(texts)
+
+    print(texts)
 
     
 #Run the app
-app.run(debug=True)
+if __name__ == "__main__":
+    app.secret_key = 'super secret key'
+    app.config['SESSION_TYPE'] = 'filesystem'
 
+    sess.init_app(app)
 
+    app.debug = True
+    app.run()
 
 
 
