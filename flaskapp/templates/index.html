@@ -8,10 +8,36 @@
 
     </head>
     <!-- <script type='text/javascript' src='scripts.js'></script> -->
-<canvas id="canvas" width="700"></canvas>
-<button type="submit" id='SubmitJ' onclick="">Submit</button>
+<div id = 'fileform'>
+    <form method="post" enctype="multipart/form-data" action="/draw">
+        Image File:
+         <br>
+        <input type="file" name="img-file" class="bg-warning" style="padding:10px">
+        <br>
+        <br>
+        <h4>Or</h4>
+        <br>
+        <br>
+        Pdf File:
+        <br>
+        <input type="file" name="pdf-file" class="bg-warning" style="padding:10px">
 
-<script>
+        <br><br>
+    
+        <!-- Pdf:
+        <br>
+        <input type="file" name="pdf-file" class="bg-warning" style="padding:10px">
+     -->
+        <h6 class="text-success">{{ msg_name }}</h6>
+        <br><br>
+        <input type="submit" name="submit" value="UPLOAD" class="btn btn-outline-warning">
+    </form>
+</div>
+<!-- <canvas id="canvas"></canvas> -->
+<!-- <button type="submit" id='SubmitJ' onclick="">Submit</button> -->
+
+
+<!-- <script>
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 var rect = {};
@@ -28,23 +54,27 @@ function init() {
     img = new Image();
     img.onload = function () {
 
-    // set size proportional to image
-    canvas.height = canvas.width * (img.height / img.width);
+    // // set size proportional to image
+    // canvas.height = canvas.width * (img.height / img.width);
 
-    // step 1 - resize to 50%
-    var oc = document.createElement('canvas'),
-        octx = oc.getContext('2d');
+    canvas.height = img.height * 0.70
+    canvas.width = img.width * 0.70
+    // // step 1 - resize to 50%
+    // var oc = document.createElement('canvas'),
+    //     octx = oc.getContext('2d');
 
-    oc.width = img.width * 1;
-    oc.height = img.height * 1;
-    octx.drawImage(img, 0, 0, oc.width, oc.height);
+    // oc.width = img.width * 1;
+    // oc.height = img.height * 1;
+    // octx.drawImage(img, 0, 0, oc.width, oc.height);
 
-    // step 2
-    octx.drawImage(oc, 0, 0, oc.width * 1, oc.height * 1);
+    // // step 2
+    // octx.drawImage(oc, 0, 0, oc.width * 1, oc.height * 1);
 
-    // step 3, resize to final size
-    ctx.drawImage(oc, 0, 0, oc.width * 1, oc.height * 1,
-    0, 0, canvas.width, canvas.height);
+    // // step 3, resize to final size
+    // ctx.drawImage(oc, 0, 0, oc.width * 1, oc.height * 1,
+    // 0, 0, canvas.width, canvas.height);
+
+    ctx.drawImage(img, 0,0,img.width ,img.height, 0 ,0, canvas.width,canvas.height)
 };
     img.src = '/api/a';
     canvas.addEventListener('mousedown', mouseDown, false);
@@ -68,26 +98,31 @@ function mouseMove(e) {
     if (drag) {
         
         // set size proportional to image
-        canvas.height = canvas.width * (img.height / img.width);
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // step 1 - resize to 50%
-        var oc = document.createElement('canvas'),
-        octx = oc.getContext('2d');
+        // canvas.height = canvas.width * (img.height / img.width);
 
-        oc.width = img.width * 1;
-        oc.height = img.height * 1;
-        octx.drawImage(img, 0, 0, oc.width, oc.height);
+        canvas.height = img.height * 0.70
+        canvas.width = img.width * 0.70
+    //     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // // step 1 - resize to 50%
+    //     var oc = document.createElement('canvas'),
+    //     octx = oc.getContext('2d');
 
-    // step 2
-        octx.drawImage(oc, 0, 0, oc.width * 1, oc.height * 1);
+    //     oc.width = img.width * 1;
+    //     oc.height = img.height * 1;
+    //     octx.drawImage(img, 0, 0, oc.width, oc.height);
 
-    // step 3, resize to final size
-        ctx.drawImage(oc, 0, 0, oc.width * 1, oc.height * 1, 0, 0, canvas.width, canvas.height);
+    // // step 2
+    //     octx.drawImage(oc, 0, 0, oc.width * 1, oc.height * 1);
+
+    // // step 3, resize to final size
+    //     ctx.drawImage(oc, 0, 0, oc.width * 1, oc.height * 1, 0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0,0,img.width,img.height, 0 ,0, canvas.width,canvas.height)
 
         rect.w = (e.pageX - this.offsetLeft) - rect.startX;
         rect.h = (e.pageY - this.offsetTop) - rect.startY;
         ctx.strokeStyle = 'red';
         ctx.strokeRect(rect.startX, rect.startY, rect.w, rect.h);
+        
         
     
     }
@@ -145,8 +180,8 @@ $('#SubmitJ').click(function() {
     });
 
 
-init();
+// init();
 
-</script>
+</script> -->
 
 </html>
