@@ -11,6 +11,9 @@ import os
 #initiates flask app
 app = Flask(__name__)
 
+sess = Session()
+
+
 UPLOAD_FOLDER = './static'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -20,6 +23,8 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 #Create empty dataframe to fill with cordinates later
 df = pd.DataFrame()
+
+image = ''
 
 
 #url to send image file to javascript intenrally
