@@ -119,7 +119,8 @@ def get_df():
 
 #detect function to load the image here in server in img variable
 def detect(data):
-    img = cv2.imread('./Primavera.jpg',cv2.IMREAD_GRAYSCALE)
+    global image
+    img = cv2.imread('./static/image/'+image,cv2.IMREAD_GRAYSCALE)
     print(img.shape)
     
     width = 0.70 * img.shape[1]
