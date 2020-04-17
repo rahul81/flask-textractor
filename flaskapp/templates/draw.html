@@ -11,9 +11,22 @@
     <!-- <script type='text/javascript' src='scripts.js'></script> -->
 
 <body onload="">
+    Enter saved template name :
+<input type="text" id = "chosen"></input>
+
+    <p>Save this template:</p>
+    <input type="radio" id="true" name="temp" value="True">
+    <label for="true">True</label><br>
+    <input type="radio" id="false" name="temp" value="false">
+    <label for="false">False</label><br>
+
+
 <button type="submit" id='home' onclick="window.location='/'">Home</button>
-<a href="/api/a" onClick="window.location.reload(true);return true;">Reload</a>
-<button type="submit" id="load">Load</button>
+<a href="/df"></a>
+<button onclick="window.location='/api/a'">Load new data</button>
+
+<!-- setTimeout(redirect, 2000) -->
+
 <canvas id="canvas"></canvas>
 <button type="submit" id='SubmitJ' onclick="">Submit</button>
 
@@ -35,20 +48,33 @@ var starty =[];
 var w =[];
 var h =[];
 var keys =[];
-	
-init();
+var selval = [];
+var tempname = [];
 
 function init() {
     img = new Image();
-	
-//image source link for the iImage object
     img.src = '/api/a';
     img.onload = function () {
 
-// set canvas size to 70% of original image
+    // // set size proportional to image
+    // canvas.height = canvas.width * (img.height / img.width);
+
     canvas.height = img.height * 0.70
     canvas.width = img.width * 0.70
-   
+    // // step 1 - resize to 50%
+    // var oc = document.createElement('canvas'),
+    //     octx = oc.getContext('2d');
+
+    // oc.width = img.width * 1;
+    // oc.height = img.height * 1;
+    // octx.drawImage(img, 0, 0, oc.width, oc.height);
+
+    // // step 2
+    // octx.drawImage(oc, 0, 0, oc.width * 1, oc.height * 1);
+
+    // // step 3, resize to final size
+    // ctx.drawImage(oc, 0, 0, oc.width * 1, oc.height * 1,
+    // 0, 0, canvas.width, canvas.height);
 
     ctx.drawImage(img, 0,0,img.width ,img.height, 0 ,0, canvas.width,canvas.height)
 };
@@ -75,10 +101,25 @@ function mouseUp() {
 function mouseMove(e) {
     if (drag) {
         
-        
+        // set size proportional to image
+        // canvas.height = canvas.width * (img.height / img.width);
+
         canvas.height = img.height * 0.70
         canvas.width = img.width * 0.70
-    
+    //     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // // step 1 - resize to 50%
+    //     var oc = document.createElement('canvas'),
+    //     octx = oc.getContext('2d');
+
+    //     oc.width = img.width * 1;
+    //     oc.height = img.height * 1;
+    //     octx.drawImage(img, 0, 0, oc.width, oc.height);
+
+    // // step 2
+    //     octx.drawImage(oc, 0, 0, oc.width * 1, oc.height * 1);
+
+    // // step 3, resize to final size
+    //     ctx.drawImage(oc, 0, 0, oc.width * 1, oc.height * 1, 0, 0, canvas.width, canvas.height);
         ctx.drawImage(img, 0,0,img.width,img.height, 0 ,0, canvas.width,canvas.height)
 
         rect.w = (e.pageX - this.offsetLeft) - rect.startX;
@@ -95,6 +136,11 @@ function mouseMove(e) {
 }
 
 
+var cars = [
+	{ "make":"Porsche", "model":"911S" },
+	{ "make":"Mercedes-Benz", "model":"220SE" },
+	{ "make":"Jaguar","model": "Mark VII" }
+];
 
 
 function myFunction() {
@@ -127,6 +173,9 @@ function myFunction() {
 // }
 
 $('#SubmitJ').click(function() {
+    selval = $("input[name='temp']:checked").val();
+    tempname = $("#chosen").val();
+
 
         console.log(cord);
         $.ajax({
@@ -134,7 +183,7 @@ $('#SubmitJ').click(function() {
           contentType: "application/json;charset=utf-8",
           url: "/postmethod",
           traditional: "true",
-          data: JSON.stringify({cord}),
+          data: JSON.stringify({cord,selval,tempname}),
           dataType: "json"
           });
         
@@ -143,17 +192,19 @@ $('#SubmitJ').click(function() {
 
 $('#SubmitJ').click(function() {
 
-delete img;
+    
+    console.log(selval)
 
 
 });
 
+function redirect(){
+   window.location = $('a').attr('href');
+}
 
 
 
-
-
-
+init();
 
 
 
