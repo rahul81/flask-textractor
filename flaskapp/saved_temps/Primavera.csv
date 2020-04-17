@@ -1,0 +1,9 @@
+,keys,startx,starty,w,h
+0,name,111,35,155,32
+1,contribuinte,210,60,91,31
+2,certificate_num,115,440,208,43
+3,contrib,116,516,76,24
+4,date,891,516,113,29
+5,product1,290,624,259,54
+6,price1,1040,622,78,26
+7,total,1005,1379,109,48
