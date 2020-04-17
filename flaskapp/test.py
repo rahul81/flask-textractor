@@ -7,6 +7,7 @@ import pandas as pd
 import cv2
 import matplotlib.pyplot as plt
 import os
+import pytesseract
 
 #initiates flask app
 app = Flask(__name__)
@@ -17,6 +18,7 @@ sess = Session()
 UPLOAD_FOLDER = './static'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 
 
 
@@ -92,12 +94,24 @@ def get_post_javascript_data():
     #loads json data in jsdata 
     jsdata = request.get_json()
     
+    save_template = jsdata['selval']
+    
     #makes df global variable so it can be accessed throughout this file
     global df
+    if save_template == 'True':
+        
+        #populates df dataframe with the recieved cordinates in jsdata 
+        df = pd.DataFrame.from_dict(jsdata['cord'])
+        df.to_csv('./saved_temps/'+image.split(sep='.')[0]+'.csv')
+        print(df)
+        detect(df)
+    else :
+
+        df = pd.read_csv('./saved_temps/'+jsdata['tempname']+'.csv')
+        df.drop(['Unnamed: 0'],axis=1,inplace=True)
+        detect(df)
     
-    #populates df dataframe with the recieved cordinates in jsdata 
-    df = pd.DataFrame.from_dict(jsdata['cord'])
-    print(df)
+
     
     #just a return statement 
     #no change needed in here
@@ -110,7 +124,9 @@ def get_post_javascript_data():
 @app.route('/df')
 def get_df():
     
-    detect(df)
+    print("From get df")
+    
+    
     return {}
 
 
@@ -121,15 +137,15 @@ def get_df():
 def detect(data):
     global image
     img = cv2.imread('./static/image/'+image,cv2.IMREAD_GRAYSCALE)
-    print(img.shape)
+    # print(img.shape)
     
     width = 0.70 * img.shape[1]
     height = 0.70 * img.shape[0]
 
     img = cv2.resize(img,(int(width),int(height)))
-    print(img.shape)
+    # print(img.shape)
 
-    import pytesseract
+    
 
     texts= {}
     df = data
@@ -141,10 +157,13 @@ def detect(data):
         text = pytesseract.image_to_string(roi)
         texts[label] = text
 
-    
+    print("From detect")
+    ext_data = pd.DataFrame.from_dict(texts,orient='index')
+    ext_data.to_csv('./results/'+image.split(sep='.')[0]+'.csv')
+    print(ext_data)
 
 
-    print(texts)
+    # print(texts)
 
     
 #Run the app
@@ -156,8 +175,5 @@ if __name__ == "__main__":
 
     app.debug = True
     app.run()
-
-
-
 
 
